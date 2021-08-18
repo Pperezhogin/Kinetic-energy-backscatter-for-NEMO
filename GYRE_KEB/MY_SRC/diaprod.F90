@@ -86,6 +86,14 @@ CONTAINS
 #endif
       ENDIF
 
+      IF( iom_use("u2") ) THEN
+         CALL iom_put( "u2", un**2 )                  ! squared u velocity
+      ENDIF
+      
+      IF( iom_use("v2") ) THEN
+         CALL iom_put( "v2", vn**2 )                  ! squared v velocity
+      ENDIF
+
       IF( iom_use("ut") ) THEN
          z3d(:,:,:) = 0.e0 
          DO jk = 1, jpkm1

@@ -290,7 +290,7 @@ MODULE dom_oce
    INTEGER , PUBLIC, DIMENSION(0:13) ::   nmonth_len    !: length in days of the months of the current year
    INTEGER , PUBLIC, DIMENSION(0:13) ::   nmonth_half   !: second since Jan 1st 0h of the current year and the half of the months
    INTEGER , PUBLIC, DIMENSION(0:13) ::   nmonth_end    !: second since Jan 1st 0h of the current year and the end of the months
-   INTEGER , PUBLIC                  ::   nsec1jan000   !: second since Jan 1st 0h of nit000 year and Jan 1st 0h the current year
+   INTEGER(kind=8) , PUBLIC          ::   nsec1jan000   !: second since Jan 1st 0h of nit000 year and Jan 1st 0h the current year
 
    !!----------------------------------------------------------------------
    !! mpp reproducibility

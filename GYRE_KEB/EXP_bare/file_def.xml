@@ -17,40 +17,44 @@
      
       <file_group id="1d" output_freq="1d"  output_level="10" enabled=".TRUE."/> <!-- 1d files -->
       <file_group id="3d" output_freq="3d"  output_level="10" enabled=".TRUE."/> <!-- 3d files -->    
-      <file_group id="5d" output_freq="5d"  output_level="10" enabled=".TRUE.">  <!-- 5d files -->  
+      
+      <file_group id="360d" output_freq="360d"  output_level="10" enabled=".TRUE.">  <!-- 360d files -->  
  
-	<file id="file1" name_suffix="_grid_T" description="ocean T grid variables" >
-	  <field field_ref="toce"         name="votemper"  />
-	  <field field_ref="soce"         name="vosaline"  />
-	  <field field_ref="sst"          name="sosstsst"  />
-	  <field field_ref="sss"          name="sosaline"  />
-	  <field field_ref="ssh"          name="sossheig"  />
-	  <field field_ref="empmr"        name="sowaflup"  />
-	  <field field_ref="qsr"          name="soshfldo"  />
-      <field field_ref="saltflx"      name="sosfldow"  />
-	  <field field_ref="qt"           name="sohefldo"  />
-	  <field field_ref="mldr10_1"     name="somxl010"  />
-	  <field field_ref="mldkz5"       name="somixhgt"  />
-    </file>
-	
-	<file id="file2" name_suffix="_grid_U" description="ocean U grid variables" >
-          <field field_ref="uoce"         name="vozocrtx"  />
-          <field field_ref="utau"         name="sozotaux"  />
-    </file>
-	
-	<file id="file3" name_suffix="_grid_V" description="ocean V grid variables" >
-          <field field_ref="voce"         name="vomecrty"  /> 
-          <field field_ref="vtau"         name="sometauy"  /> 
-    </file>
-	
-	<file id="file4" name_suffix="_grid_W" description="ocean W grid variables" >
-          <field field_ref="woce"         name="vovecrtz" />
-          <field field_ref="avt"          name="votkeavt" />
-          <field field_ref="aht2d"        name="soleahtw" />
-    </file>
+      <file id="file1" name_suffix="_ocean" description="ocean grid variables" >
+      <field field_ref="toce"         name="votemper"  />
+      <field field_ref="soce"         name="vosaline"  />
+      <field field_ref="ssh"          name="sossheig"  />
+      <field field_ref="uoce"         name="vozocrtx"  />
+      <field field_ref="voce"         name="vomecrty"  />
+      <field field_ref="ut"           name="veltempx"  />
+      <field field_ref="vt"           name="veltempy"  />
+      <field field_ref="u2"           name="squaredu"  />
+      <field field_ref="v2"           name="squaredv"  />
+      </file>
 
       </file_group>
       
+      <file_group id="5d" output_freq="5d"  output_level="10" enabled=".TRUE.">
+
+      <file id="file5" name_suffix="_surf" description="surface fields" >
+      <field field_ref="ss_umod"        name="surf_vel"     />
+      <field field_ref="ssh"            name="sossheig"     />
+      <field field_ref="sst"            name="sosstemp"     />
+      <field field_ref="ss_rot"         name="surf_rot"     />
+      <field field_ref="ss_hdiv"        name="surf_hdiv"    />
+      </file>
+
+      </file_group>
+      
+      <file_group id="1d" output_freq="1d"  output_level="10" enabled=".TRUE."> 
+
+      <file id="file7" name_suffix="_series_energy" description="scalar time series of kinetic energy" >
+      <field field_ref="kinen_0d"      name="kin_energ"   />
+
+      </file>
+
+      </file_group>
+
       <file_group id="1m" output_freq="1mo" output_level="10" enabled=".TRUE."/> <!-- real monthly files -->
       <file_group id="2m" output_freq="2mo" output_level="10" enabled=".TRUE."/> <!-- real 2m files -->
       <file_group id="3m" output_freq="3mo" output_level="10" enabled=".TRUE."/> <!-- real 3m files -->

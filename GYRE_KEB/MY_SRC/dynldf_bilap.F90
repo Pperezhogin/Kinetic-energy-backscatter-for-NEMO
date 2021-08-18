@@ -25,6 +25,8 @@ MODULE dynldf_bilap
    USE lbclnk          ! ocean lateral boundary conditions (or mpp link)
    USE wrk_nemo        ! Memory Allocation
    USE timing          ! Timing
+   USE KEB_module      ! compute Ediss for backscatter
+   USE KEB_operators   ! for KEB_test
 
    IMPLICIT NONE
    PRIVATE
@@ -81,12 +83,21 @@ CONTAINS
       REAL(wp), POINTER, DIMENSION(:,:  ) ::   zcu, zcv
       REAL(wp), POINTER, DIMENSION(:,:,:) ::   zuf, zut, zlu, zlv
       REAL(wp), ALLOCATABLE, DIMENSION(:,:) ::   z2d   ! 2D workspace 
+      REAL(wp), POINTER, DIMENSION(:,:) :: Ediss_u, Ediss_v
+      REAL(wp), POINTER, DIMENSION(:,:,:) ::  z3d
+
       !!----------------------------------------------------------------------
       !
       IF( nn_timing == 1 )  CALL timing_start('dyn_ldf_bilap')
       !
       CALL wrk_alloc( jpi, jpj,      zcu, zcv           )
       CALL wrk_alloc( jpi, jpj, jpk, zuf, zut, zlu, zlv ) 
+      IF (KEB_on) THEN
+         CALL wrk_alloc( jpi, jpj, Ediss_u, Ediss_v ) 
+      END IF
+      IF (KEB_test .and. KEB_on) THEN   
+         CALL wrk_alloc( jpi, jpj, jpk, z3d )
+      END IF
       !
       IF( kt == nit000 .AND. lwp ) THEN
          WRITE(numout,*)
@@ -161,6 +172,29 @@ CONTAINS
          DEALLOCATE( z2d )
       ENDIF
       
+      ! conservative interpolation of dissipation to T points
+      ! masking (umask, vmask) allows to exclude dissipation on the boundary
+      IF (KEB_on) THEN
+         DO jk=1, jpkm1
+            DO jj = 1, jpjm1
+               DO ji = 1, jpim1
+                  Ediss_u(ji,jj) = - 0.5_wp * fsahmu(ji,jj,jk) * zlu(ji,jj,jk)**2 * e12u(ji,jj) * e3u_0(ji,jj,jk) * umask(ji,jj,jk)
+                  Ediss_v(ji,jj) = - 0.5_wp * fsahmv(ji,jj,jk) * zlv(ji,jj,jk)**2 * e12v(ji,jj) * e3v_0(ji,jj,jk) * vmask(ji,jj,jk)
+               END DO
+            END DO
+
+            ! Ediss defined in KEB_module.F90
+            ! no need for MPI exchange
+            DO jj = 2, jpjm1
+               DO ji = 2, jpim1
+                  Ediss(ji,jj,jk) =                                                                    & 
+                  (Ediss_u(ji,jj) + Ediss_u(ji-1,jj) + Ediss_v(ji,jj) + Ediss_v(ji,jj-1))              &
+                  * r1_e12t(ji,jj) / e3t_0(ji,jj,jk)
+               END DO
+            END DO
+         END DO
+      END IF
+      
    
       ! Third derivative
       ! ----------------
@@ -226,8 +260,48 @@ CONTAINS
          !                                             ! ===============
       END DO                                           !   End of slab
       !                                                ! ===============
+      
+      ! direct computation of Ediss
+      IF (KEB_test .and. KEB_on) THEN
+         DO jk = 1, jpkm1          
+            DO jj = 2, jpjm1
+               DO ji = 2, jpim1
+                  ze2u = e2u(ji,jj) * fse3u(ji,jj,jk)
+                  
+                  ! horizontal biharmonic diffusive trends
+                  zua = - ( zuf(ji  ,jj,jk) - zuf(ji,jj-1,jk) ) / ze2u   &
+                     &  + ( zut(ji+1,jj,jk) - zut(ji,jj  ,jk) ) / e1u(ji,jj)
+                  
+                  z3d(ji,jj,jk) = - zua * ub(ji,jj,jk) * umask(ji,jj,jk)
+               END DO
+            END DO
+         END DO
+         Ediss_check = average_xyz(z3d, e1u, e2u, e3u_0, umask)
+
+         DO jk = 1, jpkm1               ! Bilaplacian
+            DO jj = 2, jpjm1
+               DO ji = 2, jpim1
+                  ze2v = e1v(ji,jj) * fse3v(ji,jj,jk)
+                  
+                  ! horizontal biharmonic diffusive trends
+                  zva = + ( zuf(ji,jj  ,jk) - zuf(ji-1,jj,jk) ) / ze2v   &
+                     &  + ( zut(ji,jj+1,jk) - zut(ji  ,jj,jk) ) / e2v(ji,jj)
+                  
+                  z3d(ji,jj,jk) = - zva * vb(ji,jj,jk) * vmask(ji,jj,jk)
+               END DO
+            END DO
+         END DO
+         Ediss_check = Ediss_check + average_xyz(z3d, e1v, e2v, e3v_0, vmask)
+      END IF
+
       CALL wrk_dealloc( jpi, jpj,      zcu, zcv           )
       CALL wrk_dealloc( jpi, jpj, jpk, zuf, zut, zlu, zlv ) 
+      IF (KEB_on) THEN
+         CALL wrk_dealloc( jpi, jpj, Ediss_u, Ediss_v )
+      END IF
+      IF (KEB_test .and. KEB_on) THEN
+         CALL wrk_dealloc( jpi, jpj, jpk, z3d )
+      END IF
       !
       IF( nn_timing == 1 )  CALL timing_stop('dyn_ldf_bilap')
       !

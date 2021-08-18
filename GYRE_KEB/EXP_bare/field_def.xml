@@ -18,6 +18,63 @@
 ============================================================================================================
     -->
 
+      <!-- KEB experiment -->
+      <field_group id="KEB_experiment">
+         <field id="ss_hdiv"      long_name="surface horizontal divergence"                                unit="s-1" grid_ref="grid_T_2D"/>
+         <field id="ss_rot"       long_name="surface relative vorticity in Coriolis units"                 unit="1"   grid_ref="grid_T_2D"/>
+         <field id="ss_umod"      long_name="surface modulus velocity"                                     unit="m/s" grid_ref="grid_T_2D"/>
+
+         <field id="u2"           long_name="squared U velocity"                                           unit="m2/s2"  grid_ref="grid_U_3D"/>
+         <field id="v2"           long_name="squared V velocity"                                           unit="m2/s2"  grid_ref="grid_V_3D"/>
+
+         <field id="negviscx"     long_name="negative viscosity KEB x tendency"                            unit="m/s2"   grid_ref="grid_U_3D"/>
+         <field id="negviscy"     long_name="negative viscosity KEB y tendency"                            unit="m/s2"   grid_ref="grid_V_3D"/>
+         <field id="SKEBpsi"      long_name="3d stochastic streamfunction SKEB"                            unit="m2/s2"  grid_ref="grid_T_3D"/>
+         <field id="SKEBpsi_s"    long_name="surface stochastic streamfunction SKEB"                       unit="m2/s2"  grid_ref="grid_T_2D"/>
+         <field id="SKEBfx"       long_name="u-tendency SKEB"                                              unit="m/s2"   grid_ref="grid_U_3D"/>
+         <field id="SKEBfy"       long_name="v-tendency SKEB"                                              unit="m/s2"   grid_ref="grid_V_3D"/>
+         
+         <field id="kinen_0d"      long_name="xyz-averaged resolved kinetic energy"                        unit="m2/s2"  grid_ref="scalarpoint"/>
+         
+         <field id="SKEBamp"       long_name="SKEBS a posteriori amplitude correction"                     unit="1"      grid_ref="scalarpoint"/>
+         <field id="average_cdiss" long_name="xyz-averaged mean(Eback) / mean(Ediss)"                      unit="1"      grid_ref="scalarpoint"/>
+         <field id="min_TKE"       long_name="xyz-min of subgrid kinetic energy"                           unit="m2/s2"  grid_ref="scalarpoint"/>
+         <field id="time_TKE"      long_name="time scale of returning energy from subgrid scales"          unit="days"   grid_ref="scalarpoint"/>
+
+         <field id="nu2t"         long_name="negative viscosity coefficient"                               unit="m2/s"   grid_ref="grid_T_3D"/>
+         <field id="TKE"          long_name="subgrid kinetic energy"                                       unit="m2/s2"  grid_ref="grid_T_3D"/>
+         <field id="Ediss"        long_name="energy dissipation"                                           unit="m2/s3"  grid_ref="grid_T_3D"/>
+         <field id="Eback"        long_name="energy backscatter"                                           unit="m2/s3"  grid_ref="grid_T_3D"/>
+         <field id="Esource"      long_name="energy dissipation after filtering and cdiss"                 unit="m2/s3"  grid_ref="grid_T_3D"/>
+         <field id="local_cdiss"  long_name="local c diss"                                                 unit="1"      grid_ref="grid_T_3D"/>
+         <field id="est_TKE"      long_name="estimation of subgrid kinetic energy"                         unit="m2/s2"  grid_ref="grid_T_3D"/>
+         
+         <field id="nu2t_z"        long_name="z-averaged negative viscosity coefficient"                   unit="m2/s"   grid_ref="grid_T_2D"/>
+         <field id="TKE_z"         long_name="z-averaged subgrid kinetic energy"                           unit="m2/s2"  grid_ref="grid_T_2D"/>
+         <field id="Ediss_z"       long_name="z-averaged energy dissipation"                               unit="m2/s3"  grid_ref="grid_T_2D"/>
+         <field id="Eback_z"       long_name="z-averaged energy backscatter"                               unit="m2/s3"  grid_ref="grid_T_2D"/>
+         <field id="Esource_z"     long_name="z-averaged energy dissipation after filtering and cdiss"     unit="m2/s3"  grid_ref="grid_T_2D"/>
+         <field id="local_cdiss_z" long_name="z-averaged local c diss"                                     unit="1"      grid_ref="grid_T_2D"/>
+         <field id="est_TKE_z"     long_name="z-averaged estimation of subgrid kinetic energy"             unit="m2/s2"  grid_ref="grid_T_2D"/>
+
+         <field id="nu2t_s"        long_name="surface negative viscosity coefficient"                      unit="m2/s"   grid_ref="grid_T_2D"/>
+         <field id="TKE_s"         long_name="surface subgrid kinetic energy"                              unit="m2/s2"  grid_ref="grid_T_2D"/>
+         <field id="Ediss_s"       long_name="surface energy dissipation"                                  unit="m2/s3"  grid_ref="grid_T_2D"/>
+         <field id="Eback_s"       long_name="surface energy backscatter"                                  unit="m2/s3"  grid_ref="grid_T_2D"/>
+         <field id="Esource_s"     long_name="surface energy dissipation after filtering and cdiss"        unit="m2/s3"  grid_ref="grid_T_2D"/>
+         <field id="local_cdiss_s" long_name="surface local c diss"                                        unit="1"      grid_ref="grid_T_2D"/>
+         <field id="est_TKE_s"     long_name="surface estimation of subgrid kinetic energy"                unit="m2/s2"  grid_ref="grid_T_2D"/>
+
+         <field id="nu2t_0d"        long_name="xyz-averaged negative viscosity coefficient"                unit="m2/s"   grid_ref="scalarpoint"/>
+         <field id="TKE_0d"         long_name="xyz-averaged subgrid kinetic energy"                        unit="m2/s2"  grid_ref="scalarpoint"/>
+         <field id="Ediss_0d"       long_name="xyz-averaged energy dissipation"                            unit="m2/s3"  grid_ref="scalarpoint"/>
+         <field id="Eback_0d"       long_name="xyz-averaged energy backscatter"                            unit="m2/s3"  grid_ref="scalarpoint"/>
+         <field id="Esource_0d"     long_name="xyz-averaged energy dissipation after filtering and cdiss"  unit="m2/s3"  grid_ref="scalarpoint"/>
+         <field id="local_cdiss_0d" long_name="xyz-averaged local c diss"                                  unit="1"      grid_ref="scalarpoint"/>
+         <field id="est_TKE_0d"     long_name="xyz-averaged estimation of subgrid kinetic energy"          unit="m2/s2"  grid_ref="scalarpoint"/>        
+
+      </field_group>
+
       <!-- T grid -->
       
       <field_group id="grid_T" grid_ref="grid_T_2D" >
@@ -539,7 +596,7 @@
 
       <!-- scalar variables available with key_diaar5 -->
 
-      <field_group id="scalar"  domain_ref="1point" >
+      <field_group id="scalar"  grid_ref="scalarpoint"  >
          <field id="voltot"     long_name="Sea Water Volume"                                standard_name="sea_water_volume"                               unit="m3"   />
          <field id="sshtot"     long_name="global mean ssh"                                 standard_name="global_average_sea_level_change"                unit="m"    />
          <field id="sshsteric"  long_name="global mean ssh steric"                          standard_name="global_average_steric_sea_level_change"         unit="m"    />
@@ -567,7 +624,7 @@
 
       <!-- LIM3 scalar variables -->
 
-      <field_group id="SBC_scalar"  domain_ref="1point" >
+      <field_group id="SBC_scalar"  grid_ref="scalarpoint"  >
          <!-- available with ln_limdiaout -->
          <field id="ibgfrcvoltop"    long_name="global mean ice/snow forcing at interface ice/snow-atm (volume equivalent ocean volume)"   unit="km3"       />
          <field id="ibgfrcvolbot"    long_name="global mean ice/snow forcing at interface ice/snow-ocean (volume equivalent ocean volume)" unit="km3"       />
@@ -592,7 +649,7 @@
   
       <!-- variables available with key_float -->
 
-      <field_group id="floatvar" domain_ref="1point" axis_ref="nfloat" operation="instant" >
+      <field_group id="floatvar" grid_ref="scalarpoint"  axis_ref="nfloat" operation="instant" >
         <field id="traj_lon"      long_name="floats longitude"                                                           unit="degrees_east"  />
         <field id="traj_lat"      long_name="floats latitude"                                                            unit="degrees_north" />
         <field id="traj_dep"      long_name="floats depth"                                                               unit="m"             />
@@ -865,7 +922,7 @@
       <field id="ketrd_bfri"    long_name="ke-trend: bottom friction (implicit)"             unit="W/s^3"                        />   
       <field id="ketrd_atf"     long_name="ke-trend: asselin time filter trend"              unit="W/s^3"                        />  
       <field id="ketrd_convP2K" long_name="ke-trend: conversion (potential to kinetic)"      unit="W/s^3"                        />
-      <field id="KE"            long_name="kinetic energy: u(n)*u(n+1)/2"                    unit="W/s^2"                        />   
+      <field id="KE"            long_name="kinetic energy: u(n)*u(n+1)/2"                    unit="W/s^2"                        />      
       <!-- variables available when explicit mixing is used -->
       <field id="dispkexyfo"    long_name="KE-trend: lateral  mixing induced dissipation"   standard_name="ocean_kinetic_energy_dissipation_per_unit_area_due_to_xy_friction"                   unit="W/m^2" grid_ref="grid_T_2D" />   
       <field id="dispkevfo"     long_name="KE-trend: vertical mixing induced dissipation"   standard_name="ocean_kinetic_energy_dissipation_per_unit_area_due_to_vertical_friction"             unit="W/m^2" grid_ref="grid_T_2D" />   
@@ -1145,7 +1202,7 @@
        <field id="fdecay"      long_name="Radiactive decay of Bomb C14"            unit="mol/m3"  grid_ref="grid_T_3D"  />
      </field_group>
 
-     <field_group id="PISCES_scalar"  domain_ref="1point" >
+     <field_group id="PISCES_scalar"  grid_ref="scalarpoint" >
        <field id="pno3tot"         long_name="global mean nitrate concentration"                  unit="mol/m3"   />
        <field id="ppo4tot"         long_name="global mean phosphorus concentration"               unit="mol/m3"   />
        <field id="psiltot"         long_name="global mean silicate concentration"                 unit="mol/m3"   />

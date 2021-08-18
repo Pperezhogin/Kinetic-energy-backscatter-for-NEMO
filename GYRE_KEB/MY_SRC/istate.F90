@@ -108,7 +108,11 @@ CONTAINS
          IF( cp_cfg == 'eel' ) THEN
             CALL istate_eel                      ! EEL   configuration : start from pre-defined U,V T-S fields
          ELSEIF( cp_cfg == 'gyre' ) THEN         
-            CALL istate_gyre                     ! GYRE  configuration : start from pre-defined T-S fields
+            IF ( ln_tsd_init ) THEN              ! read 3D T and S data at nit000
+               CALL init_TSUVssh                 ! start from R9 snapshot
+            ELSE
+               CALL istate_gyre                  ! GYRE  configuration : start from pre-defined T-S fields
+            ENDIF
          ELSE                                    ! Initial T-S, U-V fields read in files
             IF ( ln_tsd_init ) THEN              ! read 3D T and S data at nit000
                CALL dta_tsd( nit000, tsb )  
@@ -566,6 +570,42 @@ CONTAINS
       CALL wrk_dealloc( jpi, jpj, jpk, zprn)
       !
    END SUBROUTINE istate_uvg
+
+   SUBROUTINE init_TSUVssh ()
+      USE divcur          ! hor. divergence & rel. vorticity      (div_cur routine)
+      REAL(kind=8), DIMENSION (1:jpiglo,1:jpjglo,1:jpk,1:4) :: z4d
+      REAL(kind=8), DIMENSION (1:jpiglo,1:jpjglo)           :: z2d
+      INTEGER(kind=4) :: funit
+      
+      OPEN(NEWUNIT = funit, FILE = 'init_TSUV.bin', STATUS = "OLD", ACCESS = "STREAM", FORM = "UNFORMATTED")
+      READ(funit) z4d
+      CLOSE(funit)
+      
+      tsn = 0._wp
+      un = 0._wp
+      vn = 0._wp
+      
+      tsn(1:nlci,1:nlcj,:,1:2) = z4d(mig(1):mig(nlci),mjg(1):mjg(nlcj),:,1:2)    
+      un (1:nlci,1:nlcj,:    ) = z4d(mig(1):mig(nlci),mjg(1):mjg(nlcj),:,3  )
+      vn (1:nlci,1:nlcj,:    ) = z4d(mig(1):mig(nlci),mjg(1):mjg(nlcj),:,4  )    
+      
+      OPEN(NEWUNIT = funit, FILE = 'init_ssh.bin', STATUS = "OLD", ACCESS = "STREAM", FORM = "UNFORMATTED")
+      READ(funit) z2d
+      CLOSE(funit)
+      
+      sshn(1:nlci,1:nlcj) = z2d(mig(1):mig(nlci),mjg(1):mjg(nlcj))
+      
+      tsb  = tsn
+      ub   = un
+      vb   = vn
+      sshb = sshn
+      
+      CALL div_cur( nit000 )            ! now horizontal divergence and curl
+
+      hdivb(:,:,:) = hdivn(:,:,:)       ! set the before to the now value
+      rotb (:,:,:) = rotn (:,:,:)       ! set the before to the now value
+             
+   END SUBROUTINE
 
    !!=====================================================================
 END MODULE istate

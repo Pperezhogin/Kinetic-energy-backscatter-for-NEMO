@@ -84,6 +84,7 @@ MODULE nemogcm
    USE sbc_oce, ONLY: lk_oasis
    USE stopar
    USE stopts
+   USE KEB_module      ! kinetic energy backscatter setting       (KEB_init)
 
    IMPLICIT NONE
    PRIVATE
@@ -446,6 +447,7 @@ CONTAINS
                             CALL dyn_hpg_init   ! horizontal gradient of Hydrostatic pressure
                             CALL dyn_zdf_init   ! vertical diffusion
                             CALL dyn_spg_init   ! surface pressure gradient
+                            CALL KEB_init       ! init kinetic energy backscatter
 
       !                                     ! Misc. options
       IF( nn_cla == 1 .AND. cp_cfg == 'orca' .AND. jp_cfg == 2 )   CALL cla_init       ! Cross Land Advection

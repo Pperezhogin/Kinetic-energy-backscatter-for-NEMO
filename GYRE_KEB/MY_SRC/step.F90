@@ -32,6 +32,7 @@ MODULE step
    !!----------------------------------------------------------------------
    USE step_oce         ! time stepping definition modules
    USE iom
+   USE KEB_module
 
    IMPLICIT NONE
    PRIVATE
@@ -324,6 +325,7 @@ CONTAINS
                                CALL dyn_vor( kstp )         ! vorticity term including Coriolis
                                CALL dyn_ldf( kstp )         ! lateral mixing
         IF( ln_neptsimp )      CALL dyn_nept_cor( kstp )    ! add Neptune velocities (simplified)
+        IF( KEB_on )           CALL KEB_apply( kstp )       ! kinetic energy backscatter
 #if defined key_agrif
         IF(.NOT. Agrif_Root()) CALL Agrif_Sponge_dyn        ! momemtum sponge
 #endif
@@ -338,7 +340,9 @@ CONTAINS
       IF( lk_vvl           )   CALL dom_vvl_sf_swp( kstp )  ! swap of vertical scale factors
       !
       IF( ln_diahsb        )   CALL dia_hsb( kstp )         ! - ML - global conservation diagnostics
-
+      
+      IF( lrst_oce .AND. &
+        & KEB_on)              CALL KEB_rst( kstp )         ! restart for KEB
       IF( lrst_oce         )   CALL rst_write( kstp )       ! write output ocean restart file
       IF( ln_sto_eos       )   CALL sto_rst_write( kstp )   ! write restart file for stochastic parameters
 

@@ -1140,11 +1140,11 @@ CONTAINS
    SUBROUTINE iom_p0d( cdname, pfield0d )
       CHARACTER(LEN=*), INTENT(in) ::   cdname
       REAL(wp)        , INTENT(in) ::   pfield0d
-      REAL(wp)        , DIMENSION(jpi,jpj) ::   zz     ! masson
+      !REAL(wp)        , DIMENSION(jpi,jpj) ::   zz     ! masson
 #if defined key_iomput
-      zz(:,:)=pfield0d
-      CALL xios_send_field(cdname, zz)
-      !CALL xios_send_field(cdname, (/pfield0d/)) 
+      !zz(:,:)=pfield0d
+      !CALL xios_send_field(cdname, zz)
+      CALL xios_send_field(cdname, (/pfield0d/)) 
 #else
       IF( .FALSE. )   WRITE(numout,*) cdname, pfield0d   ! useless test to avoid compilation warnings
 #endif

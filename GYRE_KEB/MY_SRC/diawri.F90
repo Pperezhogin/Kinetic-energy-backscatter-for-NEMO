@@ -318,6 +318,49 @@ CONTAINS
       ENDIF
       !
       CALL iom_put( "hdiv", hdivn )                  ! Horizontal divergence
+      CALL iom_put( "ss_hdiv", hdivn(:,:,1))         ! Surface horizontal divergence
+      
+      CALL iom_put( "ss_rot",  rotn(:,:,1) / ff(:,:))   ! Surface relative vorticity in Coriolis units
+      
+      IF ( iom_use("ss_umod") ) THEN
+         z2d(:,:) = 0.e0
+         jk = 1
+         DO jj = 2, jpjm1
+            DO ji = fs_2, fs_jpim1   ! vector opt.
+               zztmp   =  1 / (e1e2t(ji,jj) * fse3t(ji,jj,jk))
+               zztmpx  = 0.5 * (  un(ji-1,jj,jk) * un(ji-1,jj,jk) * e1u(ji-1,jj) * e2u(ji-1,jj) * fse3u(ji-1,jj,jk)    &
+                  &             + un(ji  ,jj,jk) * un(ji  ,jj,jk) * e1u(ji,  jj) * e2u(ji  ,jj) * fse3u(ji  ,jj,jk) )  &
+                  &          *  zztmp 
+               !
+               zztmpy  = 0.5 * (  vn(ji,jj-1,jk) * vn(ji,jj-1,jk) * e1v(ji,jj-1) * e2v(ji,jj-1) * fse3v(ji,jj-1,jk)    &
+                  &             + vn(ji,jj  ,jk) * vn(ji,jj  ,jk) * e1v(ji,jj  ) * e2v(ji,jj  ) * fse3v(ji,jj  ,jk) )  &
+                  &          *  zztmp 
+               !
+               z2d(ji,jj) = zztmpx + zztmpy
+               !
+            ENDDO
+         ENDDO
+         CALL iom_put( "ss_umod", sqrt(z2d)) ! modulus of surface velocity     
+      END IF
+
+      IF ( iom_use('kinen_0d') ) THEN
+         zztmp = 0.
+         zztmpx = 0.
+         zztmpy = 0.
+         DO jk = 1, jpkm1
+            DO jj = 2, nlcj-1
+               DO ji = 2, nlci-1
+                  zztmpx = zztmpx + un(ji,jj,jk) ** 2 * e1u(ji,jj) * e2u(ji,jj) * fse3u(ji,jj,jk) * umask(ji,jj,jk)
+                  zztmpy = zztmpy + vn(ji,jj,jk) ** 2 * e1v(ji,jj) * e2v(ji,jj) * fse3v(ji,jj,jk) * vmask(ji,jj,jk)
+                  zztmp = zztmp + e1t(ji,jj) * e2t(ji,jj) * fse3t(ji,jj,jk) * tmask(ji,jj,jk)
+               END DO
+            END DO
+         END DO
+         CALL mpp_sum(zztmpx)
+         CALL mpp_sum(zztmpy)
+         CALL mpp_sum(zztmp)
+         CALL iom_put('kinen_0d', 0.5_wp * (zztmpx + zztmpy) / zztmp)
+      END IF
       !
       IF( iom_use("u_masstr") .OR. iom_use("u_masstr_vint") .OR. iom_use("u_heattr") .OR. iom_use("u_salttr") ) THEN
          z3d(:,:,jpk) = 0.e0
