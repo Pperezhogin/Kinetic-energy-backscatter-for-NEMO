@@ -1,0 +1,128 @@
+    <!-- 
+============================================================================================================
+=                                           output files definition                                        =
+=                                            Define your own files                                         =
+=                                         put the variables you want...                                    =
+============================================================================================================
+    -->
+    
+    <file_definition type="one_file" name="@expname@_@freq@_@startdate@_@enddate@" sync_freq="1d" min_digits="4">
+    
+      <file_group id="1ts" output_freq="1ts"  output_level="10" enabled=".TRUE."/> <!-- 1 time step files -->
+      <file_group id="1h" output_freq="1h"  output_level="10" enabled=".TRUE."/> <!-- 1h files -->
+      <file_group id="2h" output_freq="2h"  output_level="10" enabled=".TRUE."/> <!-- 2h files -->
+      <file_group id="3h" output_freq="3h"  output_level="10" enabled=".TRUE."/> <!-- 3h files -->     
+      <file_group id="4h" output_freq="4h"  output_level="10" enabled=".TRUE."/> <!-- 4h files -->
+      <file_group id="6h" output_freq="6h"  output_level="10" enabled=".TRUE."/> <!-- 6h files -->
+     
+      <file_group id="1d" output_freq="1d"  output_level="10" enabled=".TRUE."/> <!-- 1d files -->
+      <file_group id="3d" output_freq="3d"  output_level="10" enabled=".TRUE."/> <!-- 3d files -->    
+      
+      <file_group id="360d" output_freq="360d"  output_level="10" enabled=".TRUE.">  <!-- 360d files -->  
+ 
+      <file id="file1" name_suffix="_ocean" description="ocean grid variables" >
+      <field field_ref="toce"         name="votemper"  />
+      <field field_ref="soce"         name="vosaline"  />
+      <field field_ref="ssh"          name="sossheig"  />
+      <field field_ref="uoce"         name="vozocrtx"  />
+      <field field_ref="voce"         name="vomecrty"  />
+      <field field_ref="ut"           name="veltempx"  />
+      <field field_ref="vt"           name="veltempy"  />
+      <field field_ref="u2"           name="squaredu"  />
+      <field field_ref="v2"           name="squaredv"  />
+      </file>
+
+      <file id="file2" name_suffix="_KEB" description="KEB fields" >
+      <field field_ref="TKE"            name="tke"           />
+      <field field_ref="nu2t"           name="negvisc"       />
+      <field field_ref="Ediss"          name="ediss"         />
+      <field field_ref="Esource"        name="esource"       />
+      <field field_ref="local_cdiss"    name="loc_cdiss"     />
+      <field field_ref="Eback"          name="eback"         />
+
+      <field field_ref="TKE_z"          name="tke_z"         />
+      <field field_ref="est_TKE_z"      name="tke_est_z"     />
+      <field field_ref="Ediss_z"        name="ediss_z"       />
+      <field field_ref="Eback_z"        name="eback_z"       />
+      </file>
+
+      </file_group>
+      
+      <file_group id="5d" output_freq="5d"  output_level="10" enabled=".TRUE.">
+
+      <file id="file4" name_suffix="_KEB" description="KEB" >
+      <field field_ref="est_TKE_z"      name="tke_est_z"     />
+      <field field_ref="TKE_z"          name="tke_z"         />
+      <field field_ref="nu2t_z"         name="negvisc_z"     />
+      <field field_ref="Ediss_z"        name="ediss_z"       />
+      <field field_ref="Esource_z"      name="esource_z"     />
+      <field field_ref="Eback_z"        name="eback_z"       />
+
+      <field field_ref="est_TKE_s"      name="tke_est_s"     />
+      <field field_ref="TKE_s"          name="tke_s"         />
+      <field field_ref="nu2t_s"         name="negvisc_s"     />
+      <field field_ref="Ediss_s"        name="ediss_s"       />
+      <field field_ref="Esource_s"      name="esource_s"     />
+      <field field_ref="Eback_s"        name="eback_s"       />
+
+      <field field_ref="local_cdiss_s"  name="loc_cdiss_s"   />
+      </file>
+
+      <file id="file5" name_suffix="_surf" description="surface fields" >
+      <field field_ref="ss_umod"        name="surf_vel"     />
+      <field field_ref="ssh"            name="sossheig"     />
+      <field field_ref="sst"            name="sosstemp"     />
+      <field field_ref="ss_rot"         name="surf_rot"     />
+      <field field_ref="ss_hdiv"        name="surf_hdiv"    />
+      </file>
+
+      </file_group>
+      
+      <file_group id="1d" output_freq="1d"  output_level="10" enabled=".TRUE."> 
+ 
+      <file id="file6" name_suffix="_series_KEB" description="scalar time series for KEB" >
+      <field field_ref="time_TKE"      name="tke_time"     />
+      <field field_ref="est_TKE_0d"    name="tke_est"      />
+      <field field_ref="min_TKE"       name="tke_min"      />
+      <field field_ref="TKE_0d"        name="tke"          />
+      <field field_ref="nu2t_0d"       name="negvisc"      />
+      <field field_ref="Ediss_0d"      name="ediss"        />
+      <field field_ref="Esource_0d"    name="esource"      />
+      <field field_ref="Eback_0d"      name="eback"        />
+      <field field_ref="average_cdiss" name="avr_cdiss"    />
+      </file>
+
+      <file id="file7" name_suffix="_series_energy" description="scalar time series of kinetic energy" >
+      <field field_ref="kinen_0d"      name="kin_energ"   />
+      </file>
+
+      </file_group>
+      
+      <!--
+      <file_group id="5d" output_freq="5d"  output_level="10" enabled=".TRUE.">
+ 
+      <file id="file8" name_suffix="_check_noise" description="noise if appear should be seen here" >
+      <field field_ref="nu2t"        name="negvisc"    />
+      <field field_ref="TKE"         name="tke"        />
+      <field field_ref="Ediss"       name="ediss"      />
+      <field field_ref="Eback"       name="eback"      />
+      <field field_ref="Esource"     name="esource"    />
+      <field field_ref="local_cdiss" name="loc_cdiss"  />
+      <field field_ref="negviscx"    name="neg_x"      />
+      <field field_ref="negviscy"    name="neg_y"      />
+      </file>
+
+      </file_group>  
+      -->
+      <file_group id="1m" output_freq="1mo" output_level="10" enabled=".TRUE."/> <!-- real monthly files -->
+      <file_group id="2m" output_freq="2mo" output_level="10" enabled=".TRUE."/> <!-- real 2m files -->
+      <file_group id="3m" output_freq="3mo" output_level="10" enabled=".TRUE."/> <!-- real 3m files -->
+      <file_group id="4m" output_freq="4mo" output_level="10" enabled=".TRUE."/> <!-- real 4m files -->
+      <file_group id="6m" output_freq="6mo" output_level="10" enabled=".TRUE."/> <!-- real 6m files -->
+
+      <file_group id="1y"  output_freq="1y" output_level="10" enabled=".TRUE."/> <!-- real yearly files -->
+      <file_group id="2y"  output_freq="2y" output_level="10" enabled=".TRUE."/> <!-- real 2y files -->
+      <file_group id="5y"  output_freq="5y" output_level="10" enabled=".TRUE."/> <!-- real 5y files -->
+      <file_group id="10y" output_freq="10y" output_level="10" enabled=".TRUE."/> <!-- real 10y files -->
+
+   </file_definition>
